@@ -44,16 +44,7 @@
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          // Stagger children within the same parent
-          var parent = entry.target.parentElement;
-          var siblings = parent ? parent.querySelectorAll('.fade-in') : [];
-          var index = Array.from(siblings).indexOf(entry.target);
-          var delay = Math.min(index, 8) * 80;
-
-          setTimeout(function () {
-            entry.target.classList.add('visible');
-          }, delay);
-
+          entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       });
@@ -114,43 +105,22 @@
     });
   }
 
-  /* ── Header scroll shadow ── */
+  /* ── Header scroll shadow (class toggle, rAF-guarded) ── */
   var header = document.querySelector('.site-header');
   if (header) {
+    var headerScrolled = false;
+    var headerTicking = false;
     window.addEventListener('scroll', function () {
-      if (window.scrollY > 10) {
-        header.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
-      } else {
-        header.style.boxShadow = '0 1px 6px rgba(0,0,0,0.06)';
-      }
-    }, { passive: true });
-  }
-
-  /* ── Hero parallax on scroll ── */
-  var heroContent = document.querySelector('.hero-content');
-  var heroSection = document.querySelector('.hero');
-  if (heroContent && heroSection) {
-    window.addEventListener('scroll', function () {
-      var scrollY = window.scrollY;
-      var heroH = heroSection.offsetHeight;
-      if (scrollY < heroH) {
-        heroContent.style.transform = 'translateY(' + (scrollY * 0.3) + 'px)';
-        heroContent.style.opacity = Math.max(1 - scrollY / 800, 0);
-      }
-    }, { passive: true });
-  }
-
-  /* ── Canada Banner parallax on scroll ── */
-  var bannerContent = document.querySelector('.canada-banner .banner-content');
-  var bannerSection = document.querySelector('.canada-banner');
-  if (bannerContent && bannerSection) {
-    window.addEventListener('scroll', function () {
-      var rect = bannerSection.getBoundingClientRect();
-      var winH = window.innerHeight;
-      if (rect.top < winH && rect.bottom > 0) {
-        var offset = winH - rect.top;
-        bannerContent.style.transform = 'translateY(' + (offset * -0.08) + 'px)';
-      }
+      if (headerTicking) return;
+      headerTicking = true;
+      window.requestAnimationFrame(function () {
+        var shouldScroll = window.scrollY > 10;
+        if (shouldScroll !== headerScrolled) {
+          headerScrolled = shouldScroll;
+          header.classList.toggle('scrolled', shouldScroll);
+        }
+        headerTicking = false;
+      });
     }, { passive: true });
   }
 
@@ -160,36 +130,37 @@
     var preview = document.getElementById('heroPromoPreview');
     var revealed = document.getElementById('heroPromoRevealed');
     var closeBtn = document.getElementById('heroPromoClose');
-    var STORAGE_KEY = 'gv_promo_wash18s_seen';
+    var previewCloseBtn = document.getElementById('heroPromoPreviewClose');
 
-    var alreadySeen = false;
-    try { alreadySeen = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
+    setTimeout(function () {
+      promo.classList.add('show');
+      promo.setAttribute('aria-hidden', 'false');
+    }, 3000);
 
-    if (!alreadySeen) {
-      setTimeout(function () {
-        promo.classList.add('show');
-        promo.setAttribute('aria-hidden', 'false');
-      }, 3000);
+    var closePromo = function () {
+      promo.classList.remove('show');
+      promo.setAttribute('aria-hidden', 'true');
+    };
 
-      var reveal = function () {
-        if (preview) preview.hidden = true;
-        if (revealed) revealed.hidden = false;
-        try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
-      };
+    var reveal = function () {
+      if (preview) preview.hidden = true;
+      if (revealed) revealed.hidden = false;
+    };
 
-      if (preview) {
-        preview.addEventListener('click', reveal);
-        preview.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(); }
-        });
-      }
-      if (closeBtn) {
-        closeBtn.addEventListener('click', function () {
-          promo.classList.remove('show');
-          promo.setAttribute('aria-hidden', 'true');
-          try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
-        });
-      }
+    if (preview) {
+      preview.addEventListener('click', reveal);
+      preview.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(); }
+      });
+    }
+    if (previewCloseBtn) {
+      previewCloseBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        closePromo();
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closePromo);
     }
   }
 
@@ -197,24 +168,17 @@
   var giftcard = document.getElementById('heroGiftcard');
   if (giftcard) {
     var giftCloseBtn = document.getElementById('heroGiftcardClose');
-    var GC_KEY = 'gv_giftcard_invite_seen';
 
-    var gcSeen = false;
-    try { gcSeen = localStorage.getItem(GC_KEY) === '1'; } catch (e) {}
+    setTimeout(function () {
+      giftcard.classList.add('show');
+      giftcard.setAttribute('aria-hidden', 'false');
+    }, 3000);
 
-    if (!gcSeen) {
-      setTimeout(function () {
-        giftcard.classList.add('show');
-        giftcard.setAttribute('aria-hidden', 'false');
-      }, 3000);
-
-      if (giftCloseBtn) {
-        giftCloseBtn.addEventListener('click', function () {
-          giftcard.classList.remove('show');
-          giftcard.setAttribute('aria-hidden', 'true');
-          try { localStorage.setItem(GC_KEY, '1'); } catch (e) {}
-        });
-      }
+    if (giftCloseBtn) {
+      giftCloseBtn.addEventListener('click', function () {
+        giftcard.classList.remove('show');
+        giftcard.setAttribute('aria-hidden', 'true');
+      });
     }
   }
 

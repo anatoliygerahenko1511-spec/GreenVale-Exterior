@@ -21,7 +21,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/styles.css?v=3">
+  <link rel="stylesheet" href="css/styles.css?v=5">
 
   <!-- Structured Data: LocalBusiness -->
   <script type="application/ld+json">
@@ -95,15 +95,13 @@
       <!-- Promo lightbox (desktop bottom-right, mobile full-screen) -->
       <div class="hero-promo hero-promo-right" id="heroPromo" aria-hidden="true">
         <div class="hero-promo-card hero-promo-preview" id="heroPromoPreview" role="button" tabindex="0" aria-label="Reveal special offer">
+          <button class="promo-close" id="heroPromoPreviewClose" type="button" aria-label="Close promo">×</button>
           <div class="promo-eyebrow">★ Special Offer</div>
-          <div class="promo-blur-stack">
-            <span class="promo-line-blur promo-line-1">18% OFF Pressure Wash</span>
-            <span class="promo-line-blur promo-line-2">Use code WASH18S</span>
-          </div>
-          <div class="promo-tap-hint">
+          <p class="promo-teaser">A limited-time deal is waiting for you.</p>
+          <span class="promo-reveal-btn">
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11.5V6a2 2 0 0 1 4 0v8"/><path d="M13 11V8a2 2 0 0 1 4 0v8a6 6 0 0 1-6 6c-2 0-3-1-4-2l-3-5c-1-1.5 1-3 2.5-2L9 16"/></svg>
-            Tap to reveal promo
-          </div>
+            Tap to reveal
+          </span>
         </div>
         <div class="hero-promo-card hero-promo-revealed" id="heroPromoRevealed" hidden>
           <button class="promo-close" id="heroPromoClose" type="button" aria-label="Close promo">×</button>
@@ -179,7 +177,6 @@
       <div class="banner-bg" style="background-image: url('images/Canada Flag.jpg');"></div>
       <div class="banner-content banner-content-left">
         <h2 class="fade-in">Proudly Serving<br>Niagara Homes & Businesses</h2>
-        <p class="banner-subline fade-in">Reliable exterior maintenance and property refresh. Delivered with local care and professional results.</p>
       </div>
     </section>
 
@@ -205,41 +202,6 @@
             <div class="why-icon-v2 ibg-amber"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
             <h3>Great Value for Money</h3>
             <p>Professional results at competitive prices. Quality work that's worth every dollar.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ═══ SERVICE AREAS ═══ -->
-    <section class="section" style="background: var(--white);">
-      <div class="container">
-        <div class="text-center">
-          <h2>Areas We Serve</h2>
-        </div>
-        <div class="areas-photo-grid stagger">
-          <div class="area-photo-card fade-in">
-            <img src="images/St%20Kits.jpg" alt="St. Catharines" loading="lazy">
-            <div class="area-photo-label"><h4>St. Catharines</h4></div>
-          </div>
-          <div class="area-photo-card fade-in">
-            <img src="images/Niagara falls.jpg" alt="Niagara Falls" loading="lazy">
-            <div class="area-photo-label"><h4>Niagara Falls</h4></div>
-          </div>
-          <div class="area-photo-card fade-in">
-            <img src="images/NOTL.jpg" alt="Niagara-on-the-Lake" loading="lazy">
-            <div class="area-photo-label"><h4>Niagara-on-the-Lake</h4></div>
-          </div>
-          <div class="area-photo-card fade-in">
-            <img src="images/Vineyard.jpg" alt="Lincoln & Pelham" loading="lazy">
-            <div class="area-photo-label"><h4>Lincoln & Pelham</h4></div>
-          </div>
-          <div class="area-photo-card fade-in">
-            <img src="images/Welland%20%26%20Port%20Colborne.jpg" alt="Welland & Port Colborne" loading="lazy">
-            <div class="area-photo-label"><h4>Welland & Port Colborne</h4></div>
-          </div>
-          <div class="area-photo-card fade-in">
-            <img src="images/Port%20Colborne%20%26%20Fort%20Erie.jpg" alt="Fort Erie" loading="lazy">
-            <div class="area-photo-label"><h4>Fort Erie</h4></div>
           </div>
         </div>
       </div>

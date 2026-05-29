@@ -160,6 +160,9 @@ p  { line-height: 1.75; color: var(--text-sec); }
   height: var(--header-h);
   transition: box-shadow 0.3s;
 }
+.site-header.scrolled {
+  box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+}
 
 .site-header .container {
   display: flex;
@@ -1602,7 +1605,7 @@ p  { line-height: 1.75; color: var(--text-sec); }
 .fade-in {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1), transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .fade-in.visible {
   opacity: 1;
@@ -1613,14 +1616,14 @@ p  { line-height: 1.75; color: var(--text-sec); }
    HERO PROMO LIGHTBOX
    ═══════════════════════════════════════════════════════════ */
 .hero-promo {
-  position: absolute;
+  position: fixed;
   bottom: 32px;
   left: clamp(24px, 8vw, 120px);
-  z-index: 3;
+  z-index: 1100;
   width: 320px;
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   pointer-events: none;
 }
 .hero-promo.show {
@@ -1662,27 +1665,27 @@ p  { line-height: 1.75; color: var(--text-sec); }
   color: #FFD966;
   margin-bottom: 10px;
 }
-.promo-blur-stack { display: flex; flex-direction: column; gap: 6px; }
-.promo-line-blur {
-  display: block;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  filter: blur(6px);
-  user-select: none;
+.promo-teaser {
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 14px;
 }
-.promo-line-1 { font-size: 1.1rem; }
-.promo-line-2 { font-size: 0.95rem; }
-.promo-tap-hint {
+.promo-reveal-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 14px;
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
+  gap: 7px;
+  background: var(--green);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.82rem;
   letter-spacing: 0.02em;
+  padding: 9px 18px;
+  border-radius: 999px;
+  transition: background 0.2s cubic-bezier(0.22, 1, 0.36, 1), transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.hero-promo-preview:hover .promo-reveal-btn { background: var(--green-hover); }
 .hero-promo-revealed h3.promo-headline {
   font-size: 1.55rem;
   line-height: 1.1;
@@ -1730,6 +1733,7 @@ p  { line-height: 1.75; color: var(--text-sec); }
   display: none;
 }
 .promo-close:hover { color: #fff; }
+.hero-promo .promo-close { display: block; }
 
 @media (max-width: 768px) {
   .hero-promo {
@@ -1741,8 +1745,6 @@ p  { line-height: 1.75; color: var(--text-sec); }
     align-items: center;
     justify-content: center;
     padding: 24px;
-    bottom: auto;
-    left: auto;
     transform: none;
   }
   .hero-promo:not(.show) { display: none; }
@@ -2058,14 +2060,6 @@ p  { line-height: 1.75; color: var(--text-sec); }
   margin: 0;
 }
 .canada-banner-left h2 { text-align: left; }
-.banner-subline {
-  color: rgba(255, 255, 255, 0.88);
-  font-size: clamp(1rem, 1.5vw, 1.2rem);
-  line-height: 1.5;
-  margin: 18px 0 0;
-  max-width: 600px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-}
 @media (max-width: 768px) {
   .canada-banner-left .banner-content-left {
     padding: 0 24px;
@@ -2099,35 +2093,6 @@ p  { line-height: 1.75; color: var(--text-sec); }
 .ibg-amber  svg { stroke: #B45309; }
 .why-card-v2 h3 { color: var(--dark); margin-bottom: 10px; }
 .why-card-v2 p  { font-size: 0.9rem; }
-
-/* ═══════════════════════════════════════════════════════════
-   AREAS WE SERVE — Photo card grid
-   ═══════════════════════════════════════════════════════════ */
-.areas-photo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-top: 40px;
-}
-.area-photo-card {
-  position: relative; border-radius: var(--radius);
-  overflow: hidden; aspect-ratio: 4/3;
-  box-shadow: var(--shadow);
-  transition: transform 0.3s var(--ease), box-shadow 0.3s;
-}
-.area-photo-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
-.area-photo-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-.area-photo-card:hover img { transform: scale(1.07); }
-.area-photo-label {
-  position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(10,20,10,0.8) 0%, rgba(10,20,10,0.1) 55%, transparent 100%);
-  display: flex; align-items: flex-end; padding: 20px;
-}
-.area-photo-label h4 {
-  color: #fff; font-family: var(--font-heading);
-  font-weight: 700; font-size: 1rem;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
-}
 
 /* ═══════════════════════════════════════════════════════════
    INSTAGRAM CTA BLOCK
@@ -2189,21 +2154,20 @@ p  { line-height: 1.75; color: var(--text-sec); }
 .stagger > *:nth-child(2) { transition-delay: 0.1s; }
 .stagger > *:nth-child(3) { transition-delay: 0.2s; }
 .stagger > *:nth-child(4) { transition-delay: 0.3s; }
+.stagger > *:nth-child(5) { transition-delay: 0.4s; }
+.stagger > *:nth-child(6) { transition-delay: 0.5s; }
 
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE — new sections
    ═══════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .wwd-photo-grid { grid-template-columns: repeat(2, 1fr); }
-  .areas-photo-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   .canada-banner { min-height: 240px; }
-  .areas-photo-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .insta-cta-block { padding: 40px 24px; }
 }
 @media (max-width: 480px) {
   .wwd-photo-grid { grid-template-columns: 1fr; }
-  .areas-photo-grid { grid-template-columns: 1fr; }
   .insta-cta-block { padding: 32px 20px; }
 }
