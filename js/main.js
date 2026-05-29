@@ -182,4 +182,87 @@
     }
   }
 
+  /* ── Promo code: copy to clipboard ── */
+  var promoCopyBtn = document.getElementById('promoCopyBtn');
+  if (promoCopyBtn) {
+    var fallbackCopy = function (text, cb) {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        cb();
+      } catch (err) { /* no-op */ }
+    };
+
+    promoCopyBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var codeEl = document.getElementById('promoCode');
+      var text = codeEl ? codeEl.textContent.trim() : '';
+      var labelEl = promoCopyBtn.querySelector('.promo-copy-label');
+      var done = function () {
+        promoCopyBtn.classList.add('copied');
+        if (labelEl) labelEl.textContent = 'Copied!';
+        setTimeout(function () {
+          promoCopyBtn.classList.remove('copied');
+          if (labelEl) labelEl.textContent = 'Copy';
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
+      } else {
+        fallbackCopy(text, done);
+      }
+    });
+  }
+
+  /* ── Contractors application form (Formspree AJAX, inline success) ── */
+  var contractorForm = document.getElementById('contractorForm');
+  if (contractorForm) {
+    var cSuccess = document.getElementById('contractorSuccess');
+    var cError = document.getElementById('contractorError');
+
+    // Reveal "Other" text input when its checkbox is ticked
+    var otherCb = document.getElementById('svcOther');
+    var otherWrap = document.getElementById('svcOtherWrap');
+    if (otherCb && otherWrap) {
+      otherCb.addEventListener('change', function () {
+        otherWrap.classList.toggle('show', otherCb.checked);
+      });
+    }
+
+    contractorForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (cError) cError.classList.remove('show');
+      var btn = contractorForm.querySelector('[type="submit"]');
+      var origText = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+
+      fetch(contractorForm.action, {
+        method: 'POST',
+        body: new FormData(contractorForm),
+        headers: { 'Accept': 'application/json' }
+      }).then(function (res) {
+        if (res.ok) {
+          contractorForm.style.display = 'none';
+          if (cSuccess) {
+            cSuccess.classList.add('show');
+            cSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = origText; }
+          if (cError) cError.classList.add('show');
+        }
+      }).catch(function () {
+        if (btn) { btn.disabled = false; btn.textContent = origText; }
+        if (cError) cError.classList.add('show');
+      });
+    });
+  }
+
 })();

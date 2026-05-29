@@ -2171,3 +2171,226 @@ p  { line-height: 1.75; color: var(--text-sec); }
   .wwd-photo-grid { grid-template-columns: 1fr; }
   .insta-cta-block { padding: 32px 20px; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   POLISH PASS — hero balance, crisper hovers, a11y, motion
+   ═══════════════════════════════════════════════════════════ */
+
+/* Hero (index): clean left-aligned headline.
+   Replaces the off-balance 22vw nudge with a confident, intentional layout. */
+.hero-shift-h1-22 h1 { transform: none; }
+.hero-left .hero-content { max-width: 640px; }
+.hero-left h1 { letter-spacing: -0.025em; line-height: 1.08; }
+@media (max-width: 900px) {
+  .hero-shift-h1-22 h1 { transform: none; }
+}
+@media (max-width: 600px) {
+  .hero-shift-h1-22 h1 { transform: none; }
+}
+
+/* Crisper card hovers — lift only, no scale (scaling blurs text on hover). */
+.service-card:hover     { transform: translateY(-6px); }
+.who-card:hover         { transform: translateY(-6px); }
+.visual-svc-card:hover  { transform: translateY(-6px); }
+
+/* Keyboard accessibility: visible focus ring for interactive elements. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+/* On dark/photo surfaces the green ring can disappear — use white there. */
+.hero a:focus-visible,
+.cta-section a:focus-visible,
+.split-panel a:focus-visible,
+.site-footer a:focus-visible {
+  outline-color: #fff;
+}
+
+/* Text selection in brand colour. */
+::selection { background: rgba(47, 93, 58, 0.18); color: var(--dark); }
+
+/* Respect reduced-motion preference: calm everything down. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+  .fade-in { opacity: 1 !important; transform: none !important; }
+  .hero-line-inner,
+  .hero-sub-animate,
+  .hero-cta-animate { animation: none !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PROMO LIGHTBOX v2 — centered modal (desktop), fullscreen (mobile)
+   ═══════════════════════════════════════════════════════════ */
+.hero-promo {
+  position: fixed;
+  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: auto;
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transform: none;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.4s;
+}
+.hero-promo.show {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  pointer-events: none;
+}
+/* Neutralise the old corner placements — always centered now. */
+.hero-promo-right,
+.hero-giftcard { left: 0; right: 0; }
+
+.hero-promo-card {
+  width: 340px;
+  max-width: calc(100vw - 48px);
+  pointer-events: auto;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-promo.show .hero-promo-card { transform: none; }
+
+@media (max-width: 768px) {
+  .hero-promo { background: rgba(0, 0, 0, 0.72); padding: 24px; }
+  .hero-promo.show { pointer-events: auto; }
+  .hero-promo:not(.show) { display: none; }
+  .hero-promo-card { width: 100%; max-width: 360px; padding: 24px; }
+}
+
+/* Copy-code button inside the revealed promo */
+.promo-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.promo-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.15s var(--ease);
+}
+.promo-copy-btn:hover { background: rgba(255, 255, 255, 0.24); transform: translateY(-1px); }
+.promo-copy-btn .promo-copy-ic { width: 14px; height: 14px; }
+.promo-copy-btn.copied {
+  background: var(--green);
+  border-color: var(--green);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CONTRACTORS PAGE — form helpers
+   ═══════════════════════════════════════════════════════════ */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.form-row .form-group { margin-bottom: 0; }
+
+.fieldset-block { margin-bottom: 24px; }
+.fieldset-block > .field-label {
+  display: block;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--dark);
+  margin-bottom: 8px;
+}
+
+.day-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+.day-grid .check-item { flex: 0 0 auto; }
+
+.choice-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.other-input {
+  margin-top: 10px;
+  display: none;
+}
+.other-input.show { display: block; }
+
+.form-note {
+  font-size: 0.8rem;
+  color: #8a8a8a;
+  line-height: 1.55;
+  margin-top: 10px;
+}
+
+.form-success {
+  display: none;
+  background: var(--green-light);
+  border: 1px solid rgba(47, 93, 58, 0.25);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  text-align: center;
+}
+.form-success.show { display: block; }
+.form-success .success-check {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  background: var(--green);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-success h3 { color: var(--dark); margin-bottom: 10px; font-size: 1.2rem; }
+.form-success p { font-size: 0.95rem; max-width: 420px; margin: 0 auto; }
+
+.form-error {
+  display: none;
+  background: #fdecec;
+  border: 1px solid #f5b5b5;
+  color: #a3271f;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+}
+.form-error.show { display: block; }
+
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; gap: 0; margin-bottom: 0; }
+  .form-row .form-group { margin-bottom: 24px; }
+}
